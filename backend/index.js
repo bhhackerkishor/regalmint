@@ -46,7 +46,7 @@ server.use("/wishlist",wishlistRoutes)
 server.use("/contact",contactRoutes)
 server.use('/admin', AdminApiRoutes);
 server.use('/payment', paymentRoutes);
-
+const PORT = process.env.PORT || 5000; 
 
 
 
@@ -54,6 +54,6 @@ server.get("/",(req,res)=>{
     res.status(200).json({message:'running'})
 })
 
-server.listen(8000,()=>{
-    console.log('server [STARTED] ~ http://localhost:8000');
+server.listen(PORT,()=>{
+    console.log(`server [STARTED] ~ http://localhost:${PORT}`);
 })
