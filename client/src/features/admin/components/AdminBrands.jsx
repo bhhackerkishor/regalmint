@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchAllBrands, createBrand, updateBrand, deleteBrand } from "../../Brands/BrandApi.jsx";
+import { fetchAllBrands, createBrand, updateBrand, deleteBrand } from "../../brands/BrandApi.jsx";
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, IconButton, Typography, Box } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
