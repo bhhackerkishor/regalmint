@@ -328,6 +328,7 @@ export const ProductList = () => {
                 thumbnail={product.thumbnail} 
                 brand={product.brand.name} 
                 price={product.price} 
+                 discountPercentage={product.discountPercentage} 
                 handleAddRemoveFromWishlist={handleAddRemoveFromWishlist} 
             />
         </Grid>
