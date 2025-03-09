@@ -22,10 +22,10 @@ import { autoPlay } from 'react-swipeable-views-utils';
 import MobileStepper from '@mui/material/MobileStepper';
 import Lottie from 'lottie-react'
 import {loadingAnimation} from '../../../assets'
+import RelatedProducts from "RelatedProducts.jsx"
 
 
-const SIZES=['XS','S','M','L','XL']
-const COLORS=['#020202','#F6F6F6','#B82222','#BEA9A9','#E2BB8D']
+
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 
@@ -337,7 +337,10 @@ export const ProductDetails = () => {
                     </Stack>
                     
                 </Stack>
-
+                 <Stack width={is1420?"auto":'88rem'} p={is480?2:0}>
+                   <RelatedProducts currentProduct={product} />      
+                </Stack>
+                 
                 {/* reviews */}
                 <Stack width={is1420?"auto":'88rem'} p={is480?2:0}>
                     <Reviews productId={id} averageRating={averageRating}/>       
