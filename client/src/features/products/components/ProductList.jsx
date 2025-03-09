@@ -311,9 +311,16 @@ export const ProductList = () => {
 
                     
                     {/* Product Grid */}
-<Grid container spacing={is700 ? 1 : 2} justifyContent="center">
+<Grid container spacing={2} justifyContent="center" alignItems="stretch">
     {products.map((product) => (
-        <Grid item xs={6} sm={4} md={3} key={product._id}>
+        <Grid 
+            item 
+            xs={6}  // Two products per row on mobile
+            sm={4}  // Three products per row on tablets
+            md={3}  // Four products per row on larger screens
+            key={product._id}
+            sx={{ display: "flex" }} // Ensures uniform height for each card
+        >
             <ProductCard 
                 productId={product._id} 
                 id={product.slug} 
