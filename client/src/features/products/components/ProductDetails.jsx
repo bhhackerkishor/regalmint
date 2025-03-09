@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams,Link } from 'react-router-dom'
 import { clearSelectedProduct, fetchProductByIdAsync, resetProductFetchStatus, selectProductFetchStatus, selectSelectedProduct } from '../ProductSlice'
 import { Box,Checkbox,Chip,Rating, Stack,Typography, useMediaQuery,Button,Paper} from '@mui/material'
 import { addToCartAsync, resetCartItemAddStatus, selectCartItemAddStatus, selectCartItems } from '../../cart/CartSlice'
@@ -339,7 +339,7 @@ export const ProductDetails = () => {
                                 </Box>
                                 <Stack>
                                     <Typography>Return Delivery</Typography>
-                                    <Typography>Free 30 Days Delivery Returns</Typography>
+                                    <Typography>Free 7 Days Delivery Returns</Typography>
                                 </Stack>
                             </Stack>
 
@@ -356,7 +356,46 @@ export const ProductDetails = () => {
                 <Stack width={is1420?"auto":'88rem'} p={is480?2:0}>
                     <Reviews productId={id} averageRating={averageRating}/>       
                 </Stack>
-            
+            <Box
+      sx={{
+        mt: 4, 
+        textAlign: "right",
+        position: 'sticky',
+        bottom: 0,
+        left:0,
+        bgcolor: 'background.default',
+        py: 2,
+      
+
+        display: { xs: "flex", md: "none" }, // Show only on mobile
+        justifyContent: "space-between",
+       
+        padding: "10px",
+        boxShadow: "0 -2px 10px rgba(0,0,0,0.1)",
+        zIndex: 1100,
+        transition: "transform 0.3s ease-in-out",
+      }}
+    >
+      <Button
+        variant="outlined"
+        color="primary"
+        sx={{ flex: 1, marginRight: "10px", fontWeight: "bold" }}
+        onClick={handleAddToCart}
+      >
+        Add to Cart
+      </Button>
+
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{ flex: 1, fontWeight: "bold" }}
+        component={Link} 
+        to='/checkout'
+        onClick={handleAddToCart}
+      >
+        Buy Now
+      </Button>
+    </Box>
             </Stack>
         }
                 
