@@ -12,7 +12,7 @@ import { resetCartByUserIdAsync, selectCartItems } from '../../cart/CartSlice'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { SHIPPING, TAXES } from '../../../constants'
 import {motion} from 'framer-motion'
-
+import {sendOrderConfirmation} from "../../order/OrderApi"
 
 export const Checkout = () => {
 
@@ -48,6 +48,7 @@ export const Checkout = () => {
         if(currentOrder && currentOrder?._id){
             dispatch(resetCartByUserIdAsync(loggedInUser?._id))
             navigate(`/order-success/${currentOrder?.orderNumber}`)
+            sendOrderConfirmation(currentOrder?.orderNumber)
         }
     },[currentOrder])
     
