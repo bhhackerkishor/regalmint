@@ -166,12 +166,12 @@ const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const handlePayment = async () => {
     try {
-      const order=
+      const orderData=
       {
           amount: order.total,
           currency: "INR",
         }
-      const { data } = await createPaymentOrder(order);
+      const { data } = await createPaymentOrder(orderData);
       
 
       const options = {
