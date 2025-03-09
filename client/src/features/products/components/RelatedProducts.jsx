@@ -68,7 +68,7 @@ const RelatedProducts = ({ currentProduct }) => {
   if (relatedProducts.length === 0) return null;
 
   // Get the width for the container dynamically
-  const containerWidth = getCardWidth();
+  const containerWidth = getBoxWidth();
 
   return (
     <Box sx={{ position: 'relative', width: '100%', mx: 'auto', maxWidth: 1200 }}>
