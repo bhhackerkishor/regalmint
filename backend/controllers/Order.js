@@ -379,7 +379,7 @@ exports.cancelOrder = async (req, res) => {
 exports.sendPaymentConfirmation = async (req, res) => {
   try {
     const { userEmail, userName, orderId, total, paymentMode } = req.body;
-
+console.log(req.body)
     if (!userEmail || !userName || !orderId || !total || !paymentMode) {
       return res.status(400).json({ message: "All fields are required" });
     }
