@@ -118,7 +118,7 @@ const [currentStepIndex, setCurrentStepIndex] = useState(0);
     };
 
     try {
-      await sendPaymentConfirmation(emailData);
+      await sendPaymentConfirmation(order);
     } catch (err) {
       toast.error(err?.data?.message || err.message);
     }
