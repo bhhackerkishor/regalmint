@@ -195,7 +195,7 @@ const [currentStepIndex, setCurrentStepIndex] = useState(0);
           try {
             const verifyResponse = await verifyPaymentOrder(paymentData);
             
-            if (verifyResponse.data.success) {
+            if (verifyResponse.success) {
               toast.success("Payment Successful!");
               await PaidOrderHandler();
             } 
