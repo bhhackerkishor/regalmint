@@ -68,6 +68,15 @@ export const ProductDetails = () => {
     const wishlistItemDeleteStatus=useSelector(selectWishlistItemDeleteStatus)
     
     const navigate=useNavigate()
+    const handleBuyNow = async () => {
+        await handleAddToCart(); // Ensure item is added before navigation
+      
+        if (cart.length > 0) { 
+          navigate('/checkout'); 
+        } else {
+          alert("There was an issue adding the item. Please try again!");
+        }
+      };
     useEffect(()=>{
         window.scrollTo({
             top:0,
@@ -391,7 +400,7 @@ export const ProductDetails = () => {
         sx={{ flex: 1, fontWeight: "bold" }}
         component={Link} 
         to='/checkout'
-        onClick={handleAddToCart}
+        onClick={handleBuyNow}
       >
         Buy Now
       </Button>
