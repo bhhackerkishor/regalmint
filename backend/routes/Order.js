@@ -13,4 +13,8 @@ router
     .patch('/:id/update',orderController.updateOrderStatusAndLocation)
     .patch('/:id/cancel',orderController.cancelOrder)
     .patch('/:id/return',orderController.returnOrder)
+    .post("/send-order-confirmation", orderController.sendOrderConfirmation)
+    .post("/send-payment-confirmation", orderController.sendPaymentConfirmation)
+    .post("/send-order-status-update/:id", orderController.sendOrderStatusUpdate)
+
 module.exports=router
