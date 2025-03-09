@@ -378,22 +378,38 @@ exports.cancelOrder = async (req, res) => {
  
 exports.sendPaymentConfirmation = async (req, res) => { 
   try {
-    const { user, address, item, total, paymentMode, orderNumber, status } = req.body;
-    console.log(req.body);
-
-    if (!user || !address || !item || !total || !paymentMode || !orderNumber) {
-      return res.status(400).json({ message: "All fields are required" });
+    const { id } = req.body; // Order Number from URL params
+    if (!id) {
+      return res.status(400).json({ message: "Order number is required" });
     }
 
-    const userEmail = user.email || "N/A";  // Assuming user object may have an email
+    // Fetch order from the database
+    const order = await Order.findOne({ orderNumber: id })
+      .populate("user", "name email")
+      .populate({
+        path: "item.product",
+        select: "name price",
+      });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    const { user, address, item, total, paymentMode, orderNumber, status } = order;
+
+    if (!user || !user.email) {
+      return res.status(400).json({ message: "User information is missing" });
+    }
+
+    const userEmail = user.email;
     const userName = user.name || "Customer";
-    const deliveryAddress = address[0]; // Taking the first address as the delivery address
+    const deliveryAddress = address[0] || {}; // Take the first address
 
     // Format ordered items for email
     let orderItemsHTML = item.map((orderItem) => {
       return `
         <tr>
-          <td style="padding: 8px; border-bottom: 1px solid #ddd;">${orderItem.product.name || "Unknown Product"}</td>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd;">${orderItem.product?.name || "Unknown Product"}</td>
           <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${orderItem.quantity}</td>
         </tr>
       `;
@@ -439,9 +455,9 @@ exports.sendPaymentConfirmation = async (req, res) => {
 
           <h3 style="color: #333; margin-top: 20px;">📍 Delivery Address</h3>
           <p style="color: #555;">
-            ${deliveryAddress.street}, ${deliveryAddress.city}, ${deliveryAddress.state} - ${deliveryAddress.postalCode}, ${deliveryAddress.country}
+            ${deliveryAddress.street || ""}, ${deliveryAddress.city || ""}, ${deliveryAddress.state || ""} - ${deliveryAddress.postalCode || ""}, ${deliveryAddress.country || ""}
           </p>
-          <p style="color: #555;"><b>Phone:</b> ${deliveryAddress.phoneNumber}</p>
+          <p style="color: #555;"><b>Phone:</b> ${deliveryAddress.phoneNumber || "N/A"}</p>
 
           <!-- Track Order Button -->
           <div style="text-align: center; margin-top: 20px;">
