@@ -22,7 +22,7 @@ import { autoPlay } from 'react-swipeable-views-utils';
 import MobileStepper from '@mui/material/MobileStepper';
 import Lottie from 'lottie-react'
 import {loadingAnimation} from '../../../assets'
-import RelatedProducts from "RelatedProducts.jsx"
+import RelatedProducts from "./RelatedProducts.jsx"
 
 
 
