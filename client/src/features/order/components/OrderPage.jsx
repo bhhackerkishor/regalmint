@@ -171,7 +171,9 @@ const [currentStepIndex, setCurrentStepIndex] = useState(0);
           amount: order.total,
           currency: "INR",
         }
-      const { data } = await createPaymentOrder(orderData);
+      const response= await createPaymentOrder(orderData);
+      
+        const data = response
       
 
       const options = {
