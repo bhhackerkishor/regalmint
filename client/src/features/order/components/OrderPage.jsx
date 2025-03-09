@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams ,Link} from "react-router-dom";
-import { getOrderById,handleReturnProduct, PayOrderById ,sendEmail,CancelOrder} from "../OrderApi";
+import { getOrderById,handleReturnProduct, PayOrderById ,sendEmail,CancelOrder,verifyPaymentOrder,createPaymentOrder} from "../OrderApi";
 import CancelOrderButton from "./orderOverlay"
 import { motion, useScroll, useSpring, useTransform, useMotionValue, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -166,13 +166,12 @@ const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const handlePayment = async () => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:8000/payment/create-order",
-        {
+      const order=
+      {
           amount: order.total,
           currency: "INR",
         }
-      );
+      const { data } = await createPaymentOrder(order);
       
 
       const options = {
@@ -192,10 +191,7 @@ const [currentStepIndex, setCurrentStepIndex] = useState(0);
           };
 
           try {
-            const verifyResponse = await axios.post(
-              "http://localhost:8000/payment/verify-payment",
-              paymentData
-            );
+            const verifyResponse = await verifyPaymentOrder(paymentData);
             
             if (verifyResponse.data.success) {
               toast.success("Payment Successful!");
