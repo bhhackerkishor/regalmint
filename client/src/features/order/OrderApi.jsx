@@ -57,6 +57,7 @@ export const PayOrderById=async(id)=>{
 
 export const sendPaymentConfirmation=async(order)=>{
     try {
+        console.log(order)
         const res=await axiosi.post("/orders/send-payment-confirmation",order)
         return res.data
     } catch (error) {
