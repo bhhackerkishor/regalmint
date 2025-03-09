@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams,Link } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { clearSelectedProduct, fetchProductByIdAsync, resetProductFetchStatus, selectProductFetchStatus, selectSelectedProduct } from '../ProductSlice'
-import { Box,Checkbox,Rating,Chip, Stack,Typography, useMediaQuery,Button,Paper} from '@mui/material'
+import { Box,Checkbox,Rating, Stack,Typography, useMediaQuery,Button,Paper} from '@mui/material'
 import { addToCartAsync, resetCartItemAddStatus, selectCartItemAddStatus, selectCartItems } from '../../cart/CartSlice'
 import { selectLoggedInUser } from '../../auth/AuthSlice'
 import { fetchReviewsByProductIdAsync,resetReviewFetchStatus,selectReviewFetchStatus,selectReviews,} from '../../review/ReviewSlice'
 import { Reviews } from '../../review/components/Reviews'
 import {toast} from 'react-toastify'
-import RelatedProducts from './RelatedProducts';
 import {MotionConfig, motion} from 'framer-motion'
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
@@ -25,6 +24,8 @@ import Lottie from 'lottie-react'
 import {loadingAnimation} from '../../../assets'
 
 
+const SIZES=['XS','S','M','L','XL']
+const COLORS=['#020202','#F6F6F6','#B82222','#BEA9A9','#E2BB8D']
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 
@@ -36,7 +37,8 @@ export const ProductDetails = () => {
     const cartItems=useSelector(selectCartItems)
     const cartItemAddStatus=useSelector(selectCartItemAddStatus)
     const [quantity,setQuantity]=useState(1)
-    
+    const [selectedSize,setSelectedSize]=useState('')
+    const [selectedColorIndex,setSelectedColorIndex]=useState(-1)
     const reviews=useSelector(selectReviews)
     const [selectedImageIndex,setSelectedImageIndex]=useState(0)
     const theme=useTheme()
@@ -78,7 +80,7 @@ export const ProductDetails = () => {
             dispatch(fetchProductByIdAsync(id))
             dispatch(fetchReviewsByProductIdAsync(id))
         }
-    },[id,dispatch])
+    },[id])
 
     useEffect(()=>{
 
@@ -130,7 +132,7 @@ export const ProductDetails = () => {
             dispatch(resetWishlistItemAddStatus())
             dispatch(resetCartItemAddStatus())
         }
-    },[dispatch])
+    },[])
 
     const handleAddToCart=()=>{
         const item={user:loggedInUser._id,product:id,quantity}
@@ -168,7 +170,6 @@ export const ProductDetails = () => {
 
     const [activeStep, setActiveStep] = React.useState(0);
     const maxSteps = product?.images.length;
-    console.log(product)
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -185,7 +186,7 @@ export const ProductDetails = () => {
 
   return (
     <>
-    {!(productFetchStatus==='rejected' && reviewFetchStatus==='rejected') && <Stack sx={{justifyContent:'center',alignItems:'center',mb:'2rem',rowGap:"2rem",overflowX: 'hidden'}}>
+    {!(productFetchStatus==='rejected' && reviewFetchStatus==='rejected') && <Stack sx={{justifyContent:'center',alignItems:'center',mb:'2rem',rowGap:"2rem"}}>
         {
             (productFetchStatus || reviewFetchStatus) === 'pending'?
             <Stack width={is500?"35vh":'25rem'} height={'calc(100vh - 4rem)'} justifyContent={'center'} alignItems={'center'}>
@@ -250,7 +251,7 @@ export const ProductDetails = () => {
                         <Stack rowGap={".5rem"}>
 
                             {/* title */}
-                            <Typography variant='h5' fontWeight={600}>{product?.title}</Typography>
+                            <Typography variant='h4' fontWeight={600}>{product?.title}</Typography>
 
                             {/* rating */}
                             <Stack sx={{flexDirection:"row",columnGap:is340?".5rem":"1rem",alignItems:"center",flexWrap:'wrap',rowGap:'1rem'}}>
@@ -260,17 +261,7 @@ export const ProductDetails = () => {
                             </Stack>
 
                             {/* price */}
-                              <Stack direction="row" spacing={1} alignItems="center">
-                              <Typography variant="h5" sx={{textDecoration:"line-through",color:"gray"}}>₹{product?.price}</Typography>
-                                <Typography variant="h5">₹{product?.discountPrice}</Typography>
-                                {product && product.discountPercentage > 0 && (
-                                    <Chip 
-                                    label={`${product?.discountPercentage}% OFF`} 
-                                    color="success" 
-                                    size="small" 
-                                    />
-                                )}
-                                </Stack>
+                            <Typography variant='h5'>${product?.price}</Typography>
                         </Stack>
 
                         {/* description */}
@@ -287,7 +278,33 @@ export const ProductDetails = () => {
                         
                         <Stack sx={{rowGap:"1.3rem"}} width={'fit-content'}>
 
+                            {/* colors */}
+                            <Stack flexDirection={'row'} alignItems={'center'} columnGap={is387?'5px':'1rem'} width={'fit-content'}>
+                                <Typography>Colors: </Typography>
+                                <Stack flexDirection={'row'} columnGap={is387?".5rem":".2rem"} >
+                                    {
+                                        COLORS.map((color,index)=>(
+                                            <div style={{backgroundColor:"white",border:selectedColorIndex===index?`1px solid ${theme.palette.primary.dark}`:"",width:is340?"40px":"50px",height:is340?"40px":"50px",display:"flex",justifyContent:"center",alignItems:"center",borderRadius:"100%",}}>
+                                                <div onClick={()=>setSelectedColorIndex(index)} style={{width:"40px",height:"40px",border:color==='#F6F6F6'?"1px solid grayText":"",backgroundColor:color,borderRadius:"100%"}}></div>
+                                            </div>
+                                        ))
+                                    }
+                                </Stack>
+                            </Stack>
                             
+                            {/* size */}
+                            <Stack flexDirection={'row'} alignItems={'center'} columnGap={is387?'5px':'1rem'} width={'fit-content'}>
+                                <Typography>Size: </Typography>
+                                <Stack flexDirection={'row'} columnGap={is387?".5rem":"1rem"}>
+                                    {
+                                        SIZES.map((size)=>(
+                                            <motion.div onClick={()=>handleSizeSelect(size)} whileHover={{scale:1.050}} whileTap={{scale:1}} style={{border:selectedSize===size?'':"1px solid grayText",borderRadius:"8px",width:"30px",height:"30px",display:"flex",justifyContent:"center",alignItems:"center",cursor:"pointer",padding:"1.2rem",backgroundColor:selectedSize===size?"#DB4444":"whitesmoke",color:selectedSize===size?"white":""}}>
+                                                <p>{size}</p>
+                                            </motion.div>
+                                        ))
+                                    }
+                                </Stack>
+                            </Stack>
 
                             {/* quantity , add to cart and wishlist */}
                             <Stack flexDirection={"row"} columnGap={is387?".3rem":"1.5rem"} width={'100%'} >
@@ -326,7 +343,7 @@ export const ProductDetails = () => {
                         {/* product perks */}
                         <Stack mt={3} sx={{justifyContent:"center",alignItems:'center',border:"1px grayText solid",borderRadius:"7px"}}>
                             
-                            <Stack p={2} ml={7} flexDirection={'row'} alignItems={"center"} columnGap={'1rem'} width={'100%'} justifyContent={'flex-sart'}>
+                            <Stack p={2} flexDirection={'row'} alignItems={"center"} columnGap={'1rem'} width={'100%'} justifyContent={'flex-sart'}>
                                 <Box>
                                     <LocalShippingOutlinedIcon/>
                                 </Box>
@@ -336,13 +353,13 @@ export const ProductDetails = () => {
                                 </Stack>
                             </Stack>
                             <hr style={{width:"100%"}} />
-                            <Stack p={2} ml={7} flexDirection={'row'} alignItems={"center"} width={'100%'} columnGap={'1rem'} justifyContent={'flex-start'}>
+                            <Stack p={2} flexDirection={'row'} alignItems={"center"} width={'100%'} columnGap={'1rem'} justifyContent={'flex-start'}>
                                 <Box>
                                     <CachedOutlinedIcon/>
                                 </Box>
                                 <Stack>
                                     <Typography>Return Delivery</Typography>
-                                    <Typography>Free 7 Days Delivery Returns</Typography>
+                                    <Typography>Free 30 Days Delivery Returns</Typography>
                                 </Stack>
                             </Stack>
 
@@ -351,24 +368,18 @@ export const ProductDetails = () => {
                     </Stack>
                     
                 </Stack>
-                {/* Related Products */}
-               
-                
-                
+
                 {/* reviews */}
-                <Stack width={is1420?"auto":'88rem'} ml={20} p={is480?2:0}>
+                <Stack width={is1420?"auto":'88rem'} p={is480?2:0}>
                     <Reviews productId={id} averageRating={averageRating}/>       
                 </Stack>
-                
+            
             </Stack>
         }
-        
                 
     </Stack>
-    
     }
-    
     </>
 
   )
-}
+                                            }
