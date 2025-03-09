@@ -309,14 +309,25 @@ export const ProductList = () => {
                     
                     </Stack>
 
-                    {/* product grid */}
-                    <Grid gap={is700?1:2} container justifyContent={'center'} alignContent={'center'}>
-                        {
-                            products.map((product)=>(
-                                <ProductCard key={product._id} productId={product._id} id={product.slug} title={product.title} thumbnail={product.thumbnail} brand={product.brand.name} price={product.price} handleAddRemoveFromWishlist={handleAddRemoveFromWishlist}/>
-                            ))
-                        }
-                    </Grid>
+                    
+                    {/* Product Grid */}
+<Grid container spacing={is700 ? 1 : 2} justifyContent="center">
+    {products.map((product) => (
+        <Grid item xs={6} sm={4} md={3} key={product._id}>
+            <ProductCard 
+                productId={product._id} 
+                id={product.slug} 
+                title={product.title} 
+                thumbnail={product.thumbnail} 
+                brand={product.brand.name} 
+                price={product.price} 
+                handleAddRemoveFromWishlist={handleAddRemoveFromWishlist} 
+            />
+        </Grid>
+    ))}
+</Grid>
+
+                    
                     
                     {/* pagination */}
                     <Stack alignSelf={is488?'center':'flex-end'} mr={is488?0:5} rowGap={2} p={is488?1:0}>
