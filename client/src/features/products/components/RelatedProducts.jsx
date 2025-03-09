@@ -22,8 +22,9 @@ const RelatedProducts = ({ currentProduct }) => {
   if (typeof window === 'undefined') return 280;  // Default width if no window object (e.g., during SSR)
 
   const screenWidth = window.innerWidth;
-  if (screenWidth < 600) return 300;  // Mobile
-  if (screenWidth < 960) return '100%';  // Tablet
+  if (screenWidth < 600) return 340;  // Mobile
+  if (screenWidth < 840) return 400; // Middle
+  if (screenWidth >840 && screenWidth < 960) return '100%';  // Tablet
   return '100%';  // Desktop (Full width)
 };
 
