@@ -91,7 +91,7 @@ export const handleReturnProduct=async(orderId)=>{
 export const createPaymentOrder=async(order)=>{
   try {
       const res=await axiosi.post("/payment/create-order",{
-        amount: order.total,
+        amount: order.amount,
         currency: 'INR',
       })
       return res.data
