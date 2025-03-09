@@ -17,6 +17,7 @@ const razorpay = new Razorpay({
 router.post("/create-order", async (req, res) => {
   try {
     const { amount, currency } = req.body;
+    console.log(req.body)
 
     const options = {
       amount: amount * 100, // Razorpay uses paise (₹1 = 100 paise)
