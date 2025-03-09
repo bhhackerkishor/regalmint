@@ -41,7 +41,7 @@ import {
 const OrderDetailsPage = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
-  let canCancelAfterPay;
+  
   const [priceDetails, setPriceDetails] = useState({
     subtotal: 0,
     totalDiscount: 0,
@@ -82,10 +82,7 @@ const [currentStepIndex, setCurrentStepIndex] = useState(0);
     try {
       const response = await getOrderById(id);
       setOrder(response[0]);
-      canCancelAfterPay =
-  order?.isPaid &&
-  order?.paidAt &&
-  Date.now() - new Date(order.paidAt).getTime() < cancellationWindow;
+      
       
     } catch (err) {
       setError("Failed to fetch order details.");
@@ -275,12 +272,16 @@ useEffect(() => {
 }, [controls, inView]);
 
   // Define cancellation window duration (e.g., 1 hour)
-const cancellationWindow = 1 * 60 * 60 * 1000; // 1 hour in milliseconds
-
+const cancellationWindow = 2 * 60 * 60 * 1000; // 2 hour in milliseconds
+  
+const canCancelAfterPay =
+  order?.isPaid &&
+  order?.paidAt &&
+  Date.now() - new Date(order.paidAt).getTime() < cancellationWindow;
  
 
  
-  console.log(canCancelAfterPay)
+
 
   if (loading) return <CircularProgress sx={{ display: "block", margin: "20px auto" }} />;
   if (error) return <Alert severity="error">{error}</Alert>;
