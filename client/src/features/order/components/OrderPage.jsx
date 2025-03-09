@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams ,Link} from "react-router-dom";
-import { getOrderById,handleReturnProduct, PayOrderById ,sendEmail,CancelOrder,verifyPaymentOrder,createPaymentOrder} from "../OrderApi";
+import { getOrderById,handleReturnProduct, PayOrderById ,sendPaymentConfirmation,CancelOrder,verifyPaymentOrder,createPaymentOrder} from "../OrderApi";
 import CancelOrderButton from "./orderOverlay"
 import { motion, useScroll, useSpring, useTransform, useMotionValue, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -108,20 +108,17 @@ const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
 
 
-  const sendPaymentConfirmation = async () => {
+  const sendPaymentConformationEmail = async () => {
     const emailData = {
-      to: order.user.email,
-      subject: "Payment Confirmation",
-      templateData: {
-        customerName: order.user.name,
-        orderId: order.orderId,
-        totalPrice: order.totalPrice,
-        trackingLink: `https://theking-frontend.vercel.app/order/${order.orderId}`,
-      },
+      userEmail: order.user.email,
+       userName: order.user.name,
+      orderId: order.orderId,
+      total: order.totalPrice,
+     paymentMode:order.paymentMode
     };
 
     try {
-      await sendEmail(emailData);
+      await sendPaymentConfirmation(emailData);
     } catch (err) {
       toast.error(err?.data?.message || err.message);
     }
@@ -149,7 +146,7 @@ const [currentStepIndex, setCurrentStepIndex] = useState(0);
     try {
         const response = await PayOrderById(id);
                    await fetchOrderDetails();
-      sendPaymentConfirmation();
+      sendPaymentConformationEmail();
     } catch (err) {
       toast.error(err?.data?.message || err.message);
     }
