@@ -2,12 +2,14 @@ import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { Typography, Box, IconButton } from '@mui/material';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { Link } from "react-router-dom";
-import {fetchProducts} from "../ProductApi"
+import { fetchProducts } from "../ProductApi";
+
 const RelatedProducts = ({ currentProduct }) => {
   const [products, setProducts] = useState([]);
   const sliderRef = useRef(null);
   const containerRef = useRef(null);
   const CARD_GAP = 16;
+
   const getCardWidth = () => {
     if (typeof window === 'undefined') return 280;
     const screenWidth = window.innerWidth;
@@ -53,18 +55,17 @@ const RelatedProducts = ({ currentProduct }) => {
     [products, currentProduct]
   );
 
-  
-
   if (relatedProducts.length === 0) return null;
 
   return (
-    <Box sx={{ position: 'relative', width: '100vw', mx: '-16px' }}>
+    <Box sx={{ position: 'relative', width: '100%', mx: 'auto', maxWidth: 1200 }}>
       <Typography variant="h5" sx={{ 
         mt: 4, 
         mb: 2, 
         px: 2,
         fontSize: { xs: '1.25rem', sm: '1.5rem' },
-        fontWeight: 600
+        fontWeight: 600,
+        textAlign: 'center'
       }}>
         Related Products
       </Typography>
@@ -104,11 +105,10 @@ const RelatedProducts = ({ currentProduct }) => {
           ref={sliderRef}
           sx={{
             display: 'flex',
-            overflow: 'hidden',
+            overflowX: 'auto',  // Ensure horizontal scrolling
             scrollSnapType: 'x mandatory',
             scrollBehavior: 'smooth',
             width: '100%',
-            
             px: 2,
             '&::-webkit-scrollbar': { display: 'none' },
             scrollbarWidth: 'none'
@@ -120,9 +120,9 @@ const RelatedProducts = ({ currentProduct }) => {
               to={`/product-details/${product.slug}`}
               key={product._id}
               sx={{
-                flex: '0 0 calc(33.333% - 10.666px)',
+                flex: '0 0 auto',
                 minWidth: { xs: '45%', sm: '30%', md: '23%' },
-                maxWidth: "min-content",
+                maxWidth: 'calc(33.333% - 10.666px)',
                 mx: 1,
                 p: 1.5,
                 boxSizing: 'border-box',
@@ -155,7 +155,7 @@ const RelatedProducts = ({ currentProduct }) => {
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'scale-down',
+                    objectFit: 'cover',  // Adjust image fitting
                   }}
                 />
               </Box>
