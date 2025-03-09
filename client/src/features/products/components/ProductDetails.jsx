@@ -348,7 +348,7 @@ export const ProductDetails = () => {
                     </Stack>
                     
                 </Stack>
-                 <Stack width={is1420?"auto":'88rem'} p={is480?2:0}>
+                 <Stack width={is1420?"auto":'410px'} p={is480?2:0}  ml={0}  mr={0} >
                    <RelatedProducts currentProduct={product} />      
                 </Stack>
                  
