@@ -352,7 +352,7 @@ export const ProductDetails = () => {
                     
                 </Stack>
                 {/* Related Products */}
-                <RelatedProducts currentProduct={product} />
+               
                 
                 
                 {/* reviews */}
