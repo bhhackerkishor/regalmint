@@ -261,7 +261,18 @@ export const ProductDetails = () => {
                             </Stack>
 
                             {/* price */}
-                            <Typography variant='h5'>{product?.price}</Typography>
+                            <Stack direction="row" spacing={1} alignItems="center">
+                               <Typography variant="h5" sx={{textDecoration:"line-through",color:"gray"}}>₹{product?.price}</Typography>
+                                 <Typography variant="h5">₹{product?.discountPrice}</Typography>
+                                 {product && product.discountPercentage > 0 && (
+                                     <Chip 
+                                     label={`${product?.discountPercentage}% OFF`} 
+                                     color="success" 
+                                     size="small" 
+                                     />
+                                 )}
+                                 </Stack>
+                    
                         </Stack>
 
                         {/* description */}
