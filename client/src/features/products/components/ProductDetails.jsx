@@ -270,7 +270,11 @@ export const ProductDetails = () => {
                             <hr />
                         </Stack>
 
-
+                            {
+                             !loggedInUser?.isAdmin &&
+                         
+                         <Stack sx={{rowGap:"1.3rem"}} width={'fit-content'}>
+                             
                             {/* quantity , add to cart and wishlist */}
                             <Stack flexDirection={"row"} columnGap={is387?".3rem":"1.5rem"} width={'100%'} >
                                 
