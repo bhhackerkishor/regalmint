@@ -347,23 +347,115 @@ exports.cancelOrder = async (req, res) => {
   };
   exports.sendOrderConfirmation = async (req, res) => {
     try {
-      const { userEmail, userName, orderId, total, paymentMode } = req.body;
-  
-      if (!userEmail || !userName || !orderId || !total || !paymentMode) {
-        return res.status(400).json({ message: "All fields are required" });
+      const { id } = req.params; // Order Number from URL params
+      if (!id) {
+        return res.status(400).json({ message: "Order number is required" });
       }
   
-      // Email content
-      const subject = "Order Confirmation - RegalMints";
+      // Fetch order from the database
+      const order = await Order.findOne({ orderNumber: id })
+        .populate("user", "name email")
+        .populate({
+          path: "item.product",
+          select: "name price",
+        });
+  
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+  
+      const { user, address, item, total, paymentMode, orderNumber, status } = order;
+  
+      if (!user || !user.email) {
+        return res.status(400).json({ message: "User information is missing" });
+      }
+  
+      const userEmail = user.email;
+      const userName = user.name || "Customer";
+      const deliveryAddress = address[0] || {}; // Take the first address
+  
+      // Format ordered items for email
+      let orderItemsHTML = item.map((orderItem) => {
+        return `
+          <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${orderItem.product?.title || "Unknown Product"}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${orderItem.quantity}</td>
+          </tr>
+        `;
+      }).join("");
+  
+      // Email subject
+      const subject = "🛒 Order Confirmation - RegalMints";
+  
+      // Email body with order details
       const body = `
-        <h2>Thank you for your order, ${userName}!</h2>
-        <p>Your order <b>#${orderId}</b> has been successfully placed.</p>
-        <p><b>Total:</b> ₹${total}</p>
-        <p><b>Payment Mode:</b> ${paymentMode}</p>
-        <p>We will notify you once your order is shipped.</p>
-        <br>
-        <p>Best Regards,</p>
-        <p><b>RegalMints Team</b></p>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 8px;">
+          <div style="text-align: center; background-color: #2A2A2A; padding: 20px; border-radius: 8px 8px 0 0;">
+            <a href="https://regalmints.vercel.app">
+              <img src="https://static.vecteezy.com/system/resources/thumbnails/004/700/955/small/rm-letter-logo-concept-isolated-on-white-background-vector.jpg" 
+                   alt="RegalMints" width="120" height="120"style="border-radius: 50%; display: block; margin: 0 auto;">
+            </a>
+            <h1 style="color: #fff; font-family: 'Dancing Script', cursive; font-size: 28px; margin-top: 10px;">RegalMints</h1>
+          </div>
+  
+          <div style="padding: 20px; background-color: #fff; border-radius: 0 0 8px 8px;">
+            <h2 style="color: #333;">🎉 Order Confirmed!</h2>
+            <p style="color: #555;">Dear <b>${userName}</b>,</p>
+            <p style="color: #555;">Thank you for shopping with us! Your order <b>#${orderNumber}</b> has been successfully placed.</p>
+  
+            <div style="background-color: #f1f1f1; padding: 15px; border-radius: 5px; margin: 15px 0;">
+              <p style="margin: 0; font-size: 16px;"><b>Total:</b> ₹${total}</p>
+              <p style="margin: 0; font-size: 16px;"><b>Payment Mode:</b> ${paymentMode}</p>
+              <p style="margin: 0; font-size: 16px;"><b>Order Status:</b> ${status}</p>
+            </div>
+  
+            <h3 style="color: #333;">📦 Order Details</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background-color: #f1f1f1;">
+                  <th style="padding: 10px; text-align: left;">Product</th>
+                  <th style="padding: 10px; text-align: center;">Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${orderItemsHTML}
+              </tbody>
+            </table>
+  
+            <h3 style="color: #333; margin-top: 20px;">📍 Delivery Address</h3>
+            <p style="color: #555;">
+              ${deliveryAddress.street || ""}, ${deliveryAddress.city || ""}, ${deliveryAddress.state || ""} - ${deliveryAddress.postalCode || ""}, ${deliveryAddress.country || ""}
+            </p>
+            <p style="color: #555;"><b>Phone:</b> ${deliveryAddress.phoneNumber || "N/A"}</p>
+  
+            <!-- Track Order Button -->
+            <div style="text-align: center; margin-top: 20px;">
+              <a href="https://regalmints.vercel.app/order/${orderNumber}" 
+                 style="display: inline-block; padding: 12px 25px; font-size: 16px; color: #fff; 
+                        background-color: #ff6600; text-decoration: none; border-radius: 6px; 
+                        font-weight: bold;">
+                🚚 Track Your Order
+              </a>
+            </div>
+  
+            <hr style="border: 0; height: 1px; background-color: #ddd; margin: 25px 0;">
+  
+            <!-- Contact Support -->
+            <div style="text-align: center;">
+              <p style="color: #555;">Need any help? Our support team is here for you!</p>
+              <a href="https://regalmints.vercel.app/contact" 
+                 style="display: inline-block; padding: 12px 25px; font-size: 16px; color: #fff; 
+                        background-color: rgb(56, 172, 240); text-decoration: none; border-radius: 6px; 
+                        font-weight: bold;">
+                Contact Us
+              </a>
+            </div>
+  
+            <p style="text-align: center; color: #888; font-size: 14px; margin-top: 30px;">
+              Best Regards,<br><b>RegalMints Team</b>
+            </p>
+          </div>
+        </div>
       `;
   
       // Send email
@@ -371,14 +463,16 @@ exports.cancelOrder = async (req, res) => {
   
       res.status(200).json({ message: "Order confirmation email sent successfully!" });
     } catch (error) {
-      console.error("Error sending email:", error);
+      console.error("Error sending order confirmation email:", error);
       res.status(500).json({ message: "Internal Server Error", error });
     }
   };
+  
  
 exports.sendPaymentConfirmation = async (req, res) => { 
   try {
-    const { id } = req.body; // Order Number from URL params
+    const { id } = req.params; 
+    console.log(req.params)// Order Number from URL params
     if (!id) {
       return res.status(400).json({ message: "Order number is required" });
     }
@@ -409,7 +503,7 @@ exports.sendPaymentConfirmation = async (req, res) => {
     let orderItemsHTML = item.map((orderItem) => {
       return `
         <tr>
-          <td style="padding: 8px; border-bottom: 1px solid #ddd;">${orderItem.product?.name || "Unknown Product"}</td>
+          <td style="padding: 8px; border-bottom: 1px solid #ddd;">${orderItem.product?.title || "Unknown Product"}</td>
           <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${orderItem.quantity}</td>
         </tr>
       `;
@@ -424,7 +518,7 @@ exports.sendPaymentConfirmation = async (req, res) => {
         <div style="text-align: center; background-color: #2A2A2A; padding: 20px; border-radius: 8px 8px 0 0;">
           <a href="https://regalmints.vercel.app">
             <img src="https://static.vecteezy.com/system/resources/thumbnails/004/700/955/small/rm-letter-logo-concept-isolated-on-white-background-vector.jpg" 
-                 alt="RegalMints" width="120" style="border-radius: 50%; display: block; margin: 0 auto;">
+                 alt="RegalMints" width="120" height="120"  style="border-radius: 50%; display: block; margin: 0 auto;">
           </a>
           <h1 style="color: #fff; font-family: 'Dancing Script', cursive; font-size: 28px; margin-top: 10px;">RegalMints</h1>
         </div>
