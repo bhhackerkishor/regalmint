@@ -323,7 +323,7 @@ export const ProductDetails = () => {
                         {/* product perks */}
                         <Stack mt={3} sx={{justifyContent:"center",alignItems:'center',border:"1px grayText solid",borderRadius:"7px"}}>
                             
-                            <Stack p={2} flexDirection={'row'} alignItems={"center"} columnGap={'1rem'} width={'100%'} justifyContent={'flex-sart'}>
+                            <Stack p={2} ml={7} flexDirection={'row'} alignItems={"center"} columnGap={'1rem'} width={'100%'} justifyContent={'flex-sart'}>
                                 <Box>
                                     <LocalShippingOutlinedIcon/>
                                 </Box>
@@ -333,7 +333,7 @@ export const ProductDetails = () => {
                                 </Stack>
                             </Stack>
                             <hr style={{width:"100%"}} />
-                            <Stack p={2} flexDirection={'row'} alignItems={"center"} width={'100%'} columnGap={'1rem'} justifyContent={'flex-start'}>
+                            <Stack p={2} ml={7} flexDirection={'row'} alignItems={"center"} width={'100%'} columnGap={'1rem'} justifyContent={'flex-start'}>
                                 <Box>
                                     <CachedOutlinedIcon/>
                                 </Box>
