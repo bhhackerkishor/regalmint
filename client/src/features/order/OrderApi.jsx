@@ -55,10 +55,10 @@ export const PayOrderById=async(id)=>{
     }
 }
 
-export const sendPaymentConfirmation=async(order)=>{
+export const sendPaymentConfirmation=async(id)=>{
     try {
         console.log(order)
-        const res=await axiosi.post("/orders/send-payment-confirmation",order)
+        const res=await axiosi.post("/orders/send-payment-confirmation",id)
         return res.data
     } catch (error) {
         throw error.response.data
