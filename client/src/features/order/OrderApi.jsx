@@ -88,3 +88,22 @@ export const handleReturnProduct=async(orderId)=>{
         throw error.response.data
     }
 }
+export const createPaymentOrder=async(order)=>{
+  try {
+      const res=await axiosi.post("/payment/create-order",{
+        amount: order.total,
+        currency: 'INR',
+      })
+      return res.data
+  } catch (error) {
+      throw error.response.data
+  }
+}
+export const verifyPaymentOrder=async(paymentdata)=>{
+  try {
+      const res=await axiosi.post("/payment/verify-payment",paymentdata)
+      return res.data
+  } catch (error) {
+      throw error.response.data
+  }
+}
