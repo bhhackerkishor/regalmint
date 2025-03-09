@@ -18,6 +18,13 @@ const RelatedProducts = ({ currentProduct }) => {
     if (screenWidth < 960) return 240;  // Tablet
     return 280;  // Desktop
   };
+   const getBoxWidth = () => {
+    if (typeof window === 'undefined') return 280;  // Default width if no window object (e.g., during SSR)
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 600) return 300;  // Mobile
+    if (screenWidth < 960) return 500;  // Tablet
+    return 100%;  // Desktop
+  };
 
   // Scroll functions to move horizontally in the slider
   const scrollLeft = () => {
