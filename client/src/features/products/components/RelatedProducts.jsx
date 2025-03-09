@@ -10,14 +10,16 @@ const RelatedProducts = ({ currentProduct }) => {
   const containerRef = useRef(null);
   const CARD_GAP = 16;
 
+  // Dynamic width function for different screen sizes
   const getCardWidth = () => {
-    if (typeof window === 'undefined') return 280;
+    if (typeof window === 'undefined') return 280;  // Default width if no window object (e.g., during SSR)
     const screenWidth = window.innerWidth;
     if (screenWidth < 600) return 180;  // Mobile
     if (screenWidth < 960) return 240;  // Tablet
-    return 280;                         // Desktop
+    return 280;  // Desktop
   };
 
+  // Scroll functions to move horizontally in the slider
   const scrollLeft = () => {
     const cardWidth = getCardWidth();
     sliderRef.current?.scrollBy({
@@ -34,6 +36,7 @@ const RelatedProducts = ({ currentProduct }) => {
     });
   };
 
+  // Fetch related products
   const fetchAllProducts = async () => {
     try {
       const response = await fetchProducts(currentProduct?.category?._id);
@@ -57,6 +60,9 @@ const RelatedProducts = ({ currentProduct }) => {
 
   if (relatedProducts.length === 0) return null;
 
+  // Get the width for the container dynamically
+  const containerWidth = getCardWidth();
+
   return (
     <Box sx={{ position: 'relative', width: '100%', mx: 'auto', maxWidth: 1200 }}>
       <Typography variant="h5" sx={{ 
@@ -73,7 +79,7 @@ const RelatedProducts = ({ currentProduct }) => {
       <Box ref={containerRef} sx={{ 
         position: 'relative',
         overflow: 'hidden',
-        width: '100%',
+        width: containerWidth,  // Dynamically set width based on screen size
         '&:hover .nav-button': { opacity: 1 }
       }}>
         <IconButton 
