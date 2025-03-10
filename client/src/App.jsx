@@ -14,7 +14,7 @@ import { Protected } from "./features/auth/components/Protected";
 import { useAuthCheck } from "./hooks/useAuth/useAuthCheck";
 import { useFetchLoggedInUserDetails } from "./hooks/useAuth/useFetchLoggedInUserDetails";
 import { NotFoundPage } from "./pages/NotFoundPage";
-
+import LandingAnimation from "./assets/animations/LandingAnimation.jsx"
 
 // Import pages
 import {
@@ -111,7 +111,9 @@ function App() {
     )
   );
 
-  return isAuthChecked ? <RouterProvider router={routes} /> : "";
-}
+  return isAuthChecked ? (
+    <RouterProvider router={routes} />
+  ) : (<><LandingAnimation/></>
+  )}
 
 export default App;
