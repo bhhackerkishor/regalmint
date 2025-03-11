@@ -1,5 +1,6 @@
 
 import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
 import {
   Navigate,
   Route,
@@ -14,7 +15,7 @@ import { Protected } from "./features/auth/components/Protected";
 import { useAuthCheck } from "./hooks/useAuth/useAuthCheck";
 import { useFetchLoggedInUserDetails } from "./hooks/useAuth/useFetchLoggedInUserDetails";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import LandingAnimation from "./assets/animations/LandingAnimation.jsx"
+
 
 // Import pages
 import {
@@ -49,6 +50,7 @@ import { TermsAndConditionsPage } from "./pages/TermsAndConditions.jsx";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage.jsx";
 import { OrderPage } from "./pages/OrderPage.jsx";
 import { AdminOrderUpdatePage } from "./pages/AdminOrderUpdate.jsx";
+import LandingAnimation from "./assets/animations/regalLoading.jsx"
 function App() {
   const isAuthChecked = useSelector(selectIsAuthChecked);
   const loggedInUser = useSelector(selectLoggedInUser);
