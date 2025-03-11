@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams,Link } from 'react-router-dom'
 import { clearSelectedProduct, fetchProductByIdAsync, resetProductFetchStatus, selectProductFetchStatus, selectSelectedProduct } from '../ProductSlice'
-import { Box,Checkbox,Chip,Rating, Stack,Typography, useMediaQuery,Button,Paper} from '@mui/material'
+import { Box,Checkbox,Rating,Chip, Stack,Typography, useMediaQuery,Button,Paper} from '@mui/material'
 import { addToCartAsync, resetCartItemAddStatus, selectCartItemAddStatus, selectCartItems } from '../../cart/CartSlice'
 import { selectLoggedInUser } from '../../auth/AuthSlice'
 import { fetchReviewsByProductIdAsync,resetReviewFetchStatus,selectReviewFetchStatus,selectReviews,} from '../../review/ReviewSlice'
 import { Reviews } from '../../review/components/Reviews'
 import {toast} from 'react-toastify'
+import RelatedProducts from './RelatedProducts';
 import {MotionConfig, motion} from 'framer-motion'
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
@@ -22,8 +23,6 @@ import { autoPlay } from 'react-swipeable-views-utils';
 import MobileStepper from '@mui/material/MobileStepper';
 import Lottie from 'lottie-react'
 import {loadingAnimation} from '../../../assets'
-import RelatedProducts from "./RelatedProducts.jsx"
-
 
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
@@ -37,8 +36,7 @@ export const ProductDetails = () => {
     const cartItems=useSelector(selectCartItems)
     const cartItemAddStatus=useSelector(selectCartItemAddStatus)
     const [quantity,setQuantity]=useState(1)
-    const [selectedSize,setSelectedSize]=useState('')
-    const [selectedColorIndex,setSelectedColorIndex]=useState(-1)
+    
     const reviews=useSelector(selectReviews)
     const [selectedImageIndex,setSelectedImageIndex]=useState(0)
     const theme=useTheme()
@@ -68,6 +66,13 @@ export const ProductDetails = () => {
     const wishlistItemDeleteStatus=useSelector(selectWishlistItemDeleteStatus)
     
     const navigate=useNavigate()
+    useEffect(()=>{
+        window.scrollTo({
+            top:0,
+            behavior:"instant"
+        })
+    },[])
+    
     const handleBuyNow = async () => {
         await handleAddToCart(); // Ensure item is added before navigation
       
@@ -77,19 +82,14 @@ export const ProductDetails = () => {
           alert("There was an issue adding the item. Please try again!");
         }
       };
-    useEffect(()=>{
-        window.scrollTo({
-            top:0,
-            behavior:"instant"
-        })
-    },[])
+      
     
     useEffect(()=>{
         if(id){
             dispatch(fetchProductByIdAsync(id))
             dispatch(fetchReviewsByProductIdAsync(id))
         }
-    },[id])
+    },[id,dispatch])
 
     useEffect(()=>{
 
@@ -141,7 +141,7 @@ export const ProductDetails = () => {
             dispatch(resetWishlistItemAddStatus())
             dispatch(resetCartItemAddStatus())
         }
-    },[])
+    },[dispatch])
 
     const handleAddToCart=()=>{
         const item={user:loggedInUser._id,product:id,quantity}
@@ -179,6 +179,7 @@ export const ProductDetails = () => {
 
     const [activeStep, setActiveStep] = React.useState(0);
     const maxSteps = product?.images.length;
+    console.log(product)
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -195,7 +196,7 @@ export const ProductDetails = () => {
 
   return (
     <>
-    {!(productFetchStatus==='rejected' && reviewFetchStatus==='rejected') && <Stack sx={{justifyContent:'center',alignItems:'center',mb:'2rem',rowGap:"2rem",height:"auto"}}>
+    {!(productFetchStatus==='rejected' && reviewFetchStatus==='rejected') && <Stack sx={{justifyContent:'center',alignItems:'center',mb:'2rem',rowGap:"2rem",overflowX: 'hidden'}}>
         {
             (productFetchStatus || reviewFetchStatus) === 'pending'?
             <Stack width={is500?"35vh":'25rem'} height={'calc(100vh - 4rem)'} justifyContent={'center'} alignItems={'center'}>
@@ -260,7 +261,7 @@ export const ProductDetails = () => {
                         <Stack rowGap={".5rem"}>
 
                             {/* title */}
-                            <Typography variant='h4' fontWeight={600}>{product?.title}</Typography>
+                            <Typography variant='h5' fontWeight={600}>{product?.title}</Typography>
 
                             {/* rating */}
                             <Stack sx={{flexDirection:"row",columnGap:is340?".5rem":"1rem",alignItems:"center",flexWrap:'wrap',rowGap:'1rem'}}>
@@ -270,18 +271,17 @@ export const ProductDetails = () => {
                             </Stack>
 
                             {/* price */}
-                            <Stack direction="row" spacing={1} alignItems="center">
-                               <Typography variant="h5" sx={{textDecoration:"line-through",color:"gray"}}>₹{product?.price}</Typography>
-                                 <Typography variant="h5">₹{product?.discountPrice}</Typography>
-                                 {product && product.discountPercentage > 0 && (
-                                     <Chip 
-                                     label={`${product?.discountPercentage}% OFF`} 
-                                     color="success" 
-                                     size="small" 
-                                     />
-                                 )}
-                                 </Stack>
-                    
+                              <Stack direction="row" spacing={1} alignItems="center">
+                              <Typography variant="h5" sx={{textDecoration:"line-through",color:"gray"}}>₹{product?.price}</Typography>
+                                <Typography variant="h5">₹{product?.discountPrice}</Typography>
+                                {product && product.discountPercentage > 0 && (
+                                    <Chip 
+                                    label={`${product?.discountPercentage}% OFF`} 
+                                    color="success" 
+                                    size="small" 
+                                    />
+                                )}
+                                </Stack>
                         </Stack>
 
                         {/* description */}
@@ -289,12 +289,17 @@ export const ProductDetails = () => {
                             <Typography>{product?.description}</Typography>
                             <hr />
                         </Stack>
+                        
 
-                            {
-                             !loggedInUser?.isAdmin &&
-                         
-                         <Stack sx={{rowGap:"1.3rem"}} width={'fit-content'}>
-                             
+                        {/* color, size and add-to-cart */}
+
+                        {
+                            !loggedInUser?.isAdmin &&
+                        
+                        <Stack sx={{rowGap:"1.3rem"}} width={'fit-content'}>
+
+                            
+
                             {/* quantity , add to cart and wishlist */}
                             <Stack flexDirection={"row"} columnGap={is387?".3rem":"1.5rem"} width={'100%'} >
                                 
@@ -357,15 +362,15 @@ export const ProductDetails = () => {
                     </Stack>
                     
                 </Stack>
-                 <Stack width={is1420?"auto":'410px'} p={is480?2:0}  ml={0}  mr={0} >
-                   <RelatedProducts currentProduct={product} />      
-                </Stack>
-                 
+                {/* Related Products */}
+                <RelatedProducts currentProduct={product} />
+                
+                
                 {/* reviews */}
-                <Stack width={is1420?"auto":'88rem'} p={is480?2:0}>
+                <Stack width={is1420?"auto":'88rem'} ml={20} p={is480?2:0}>
                     <Reviews productId={id} averageRating={averageRating}/>       
                 </Stack>
-            <Box
+                <Box
       sx={{
         mt: 4, 
         textAlign: "right",
@@ -405,12 +410,16 @@ export const ProductDetails = () => {
         Buy Now
       </Button>
     </Box>
+            
             </Stack>
         }
+        
                 
     </Stack>
+    
     }
+    
     </>
 
   )
-                                            }
+}
