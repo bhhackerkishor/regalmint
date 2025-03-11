@@ -53,7 +53,7 @@ export const ProductCard = ({id,productId,title,price,thumbnail,brand,stockQuant
                 </Stack>
 
                 <Stack sx={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
-                    <Typography>₹{Math.round(price - (price * discountPercentage / 100))}}</Typography>
+                    <Typography>₹{Math.round(price - (price * discountPercentage / 100))}</Typography>
                     {
                         !isWishlistCard && !isAdminCard && (
                             loggedInUser ? (
