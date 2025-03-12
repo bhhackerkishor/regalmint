@@ -50,7 +50,7 @@ import { TermsAndConditionsPage } from "./pages/TermsAndConditions.jsx";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage.jsx";
 import { OrderPage } from "./pages/OrderPage.jsx";
 import { AdminOrderUpdatePage } from "./pages/AdminOrderUpdate.jsx";
-import LandingAnimation from "./assets/animations/LandingAnimation.jsx"
+import LoadingScreen from "./assets/animations/LoadingScreen.jsx"
 function App() {
   const isAuthChecked = useSelector(selectIsAuthChecked);
   const loggedInUser = useSelector(selectLoggedInUser);
@@ -115,7 +115,7 @@ function App() {
 
   return isAuthChecked ? (
     <RouterProvider router={routes} />
-  ) : (<><LandingAnimation/></>
+  ) : (<><LoadingScreen/></>
   )}
 
 export default App;
