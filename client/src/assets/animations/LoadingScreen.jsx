@@ -65,7 +65,7 @@ const LoadingScreen = () => {
       
       <Typography
         variant={isSmallScreen ? "body1" : "h6"}
-        color="#FFF"
+        color="grey"
         fontStyle="italic"
         mt={2}
         textAlign="center"
