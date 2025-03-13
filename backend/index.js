@@ -32,6 +32,13 @@ server.use(express.json())
 server.use(cookieParser())
 server.use(morgan("tiny"))
 
+app.options("*");
+
+
+// ✅ Health check route for UptimeRobot (keeps the server alive)
+app.get('/health', (req, res) => {
+   res.status(200).json({ status: "Server is alive!" });
+});
 // routeMiddleware
 server.use("/auth",authRoutes)
 server.use("/users",userRoutes)
