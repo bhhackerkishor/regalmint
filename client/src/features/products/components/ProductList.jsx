@@ -327,7 +327,8 @@ export const ProductList = () => {
                 title={product.title} 
                 thumbnail={product.thumbnail} 
                 brand={product.brand.name} 
-                price={product.price} 
+                price={product.price}
+                discountPrice={product.discountPrice}
                  discountPercentage={product.discountPercentage} 
                 handleAddRemoveFromWishlist={handleAddRemoveFromWishlist} 
             />
