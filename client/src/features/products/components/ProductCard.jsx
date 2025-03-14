@@ -10,7 +10,7 @@ import { selectLoggedInUser } from '../../auth/AuthSlice';
 import { addToCartAsync,selectCartItems } from '../../cart/CartSlice';
 import {motion} from 'framer-motion'
 
-export const ProductCard = ({id,productId,title,price,thumbnail,brand,stockQuantity,handleAddRemoveFromWishlist,isWishlistCard,isAdminCard}) => {
+export const ProductCard = ({id,productId,title,price,discountPrice,thumbnail,brand,stockQuantity,handleAddRemoveFromWishlist,isWishlistCard,isAdminCard}) => {
 
     const navigate=useNavigate()
     const wishlistItems=useSelector(selectWishlistItems)
@@ -53,7 +53,7 @@ export const ProductCard = ({id,productId,title,price,thumbnail,brand,stockQuant
                 </Stack>
 
                 <Stack sx={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
-                    <Typography>₹{price}</Typography>
+                    <Typography>₹{discountPrice}</Typography>
                     {
                         !isWishlistCard && !isAdminCard && (
                             loggedInUser ? (
