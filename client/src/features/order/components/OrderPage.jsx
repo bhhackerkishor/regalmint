@@ -272,12 +272,15 @@ useEffect(() => {
 }, [controls, inView]);
 
   // Define cancellation window duration (e.g., 1 hour)
-const cancellationWindow = 2 * 60 * 60 * 1000; // 2 hour in milliseconds
-  
+const cancellationWindow = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+
 const canCancelAfterPay =
   order?.isPaid &&
   order?.paidAt &&
   Date.now() - new Date(order.paidAt).getTime() < cancellationWindow;
+
+const canCancel = !order?.isPaid || canCancelAfterPay;
+
  
 
  
@@ -304,7 +307,7 @@ const canCancelAfterPay =
               color={getStatusColor(currentStatus)}
               sx={{ fontWeight: 600, fontSize: "1rem" }}
             />
-            {!order.isCanceled && !order.isDelivered && canCancelAfterPay &&
+            {!order.isCanceled && !order.isDelivered && canCancel &&
             <CancelOrderButton id={id} CancelOrder={CancelOrderHandler} fetchOrderDetails={fetchOrderDetails} />
 }
             {order.paymentMode === "COD" && !order.isPaid && order.isCanceled && (
