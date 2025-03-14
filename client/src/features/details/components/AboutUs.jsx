@@ -9,8 +9,12 @@ const AboutPage = () => {
     <div>
       <header style={{ backgroundColor: '#f4f4f4', padding: '3rem 0', textAlign: 'center' }}>
         <Container>
-          <img src="/path/to/logo.png" alt="RegalMints Logo" style={{ maxWidth: '150px' }} />
-          <Typography variant="h3" component="h1" gutterBottom>
+          <img 
+  src="https://static.vecteezy.com/system/resources/thumbnails/004/700/955/small/rm-letter-logo-concept-isolated-on-white-background-vector.jpg" 
+  alt="RegalMints Logo" 
+  style={{ maxWidth: '150px', borderRadius: '50%' }} 
+/>
+<Typography variant="h3" component="h1" gutterBottom>
             Welcome to RegalMints
           </Typography>
           <Typography variant="body1" color="textSecondary">
@@ -31,7 +35,7 @@ const AboutPage = () => {
               </Typography>
             </Grid>
             <Grid item md={6}>
-              <img src="/path/to/your-image.jpg" alt="Our Story Image" style={{ width: '100%', borderRadius: '8px' }} />
+              <img src="https://img.freepik.com/premium-photo/modern-office-building-business-center-neural-network-ai-generated_76080-22242.jpg" alt="Our Story Image" style={{ width: '100%', borderRadius: '8px' }} />
             </Grid>
           </Grid>
         </Container>
@@ -65,30 +69,41 @@ const AboutPage = () => {
         </Container>
       </section>
 
-      <section id="our-team" style={{ backgroundColor: '#fff', padding: '3rem 0' }}>
-        <Container>
-          <Typography variant="h4" component="h2" align="center" gutterBottom>
-            Meet the Team
-          </Typography>
-          <Grid container spacing={4} justifyContent="center">
-            {["John Doe", "Jane Smith", "Alex Lee"].map((member, index) => (
-              <Grid item md={4} key={index}>
-                <Card>
-                  <CardContent style={{ textAlign: 'center' }}>
-                    <img src={`/path/to/team-member${index + 1}.jpg`} alt={member} style={{ width: '80px', height: '80px', borderRadius: '50%' }} />
-                    <Typography variant="h6" component="h3" className="mt-3">
-                      {member}
-                    </Typography>
-                    <Typography variant="subtitle2" color="textSecondary">
-                      {index === 0 ? "CEO & Founder" : index === 1 ? "Head of Marketing" : "Chief Product Officer"} <GroupIcon fontSize="small" />
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </section>
+      <section id="about-me" style={{ backgroundColor: '#fff', padding: '3rem 0' }}>
+  <Container>
+    <Typography variant="h4" component="h2" align="center" gutterBottom>
+      Meet the Founder
+    </Typography>
+    <Grid container justifyContent="center">
+      <Grid item md={4}>
+        <Card>
+          <CardContent style={{ textAlign: 'center' }}>
+            <img src="https://kishordev.vercel.app/images/person.png" alt="Kishor" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+            <Typography variant="h6" component="h3" className="mt-3">
+              Kishor
+            </Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              Founder & CEO
+            </Typography>
+            <Typography variant="body2" color="textSecondary" style={{ marginTop: '10px' }}>
+              Passionate about building innovative solutions and making e-commerce accessible for everyone.
+            </Typography>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              href="https://kishordev.vercel.app" 
+              target="_blank" 
+              style={{ marginTop: '15px' }}
+            >
+              View Portfolio
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  </Container>
+</section>
+
 
       <section id="contact" style={{ backgroundColor: '#f4f4f4', padding: '3rem 0' }}>
         <Container>
