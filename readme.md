@@ -2,7 +2,7 @@
 
 RegalMints is a powerful, scalable **MERN Stack e-commerce platform** with **Printrove API integration** for seamless **print-on-demand** services. It offers a smooth shopping experience, robust admin controls, and an intuitive UI built with **React, Redux Toolkit, and Material UI**.
 
-![RegalMints Homepage](https://github.com/bhhackerkishor/regalmints/blob/main/frontend/src/assets/images/front.png?raw=true)
+![RegalMints Homepage](https://res.cloudinary.com/drmjevfh8/image/upload/v1741957652/Screenshot_8_ltiz8f.png)
 
 ## 🚀 Features
 
