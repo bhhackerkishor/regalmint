@@ -193,7 +193,7 @@ export const AdminProductsPage = () => {
                 products.map((product)=>(
                     <Stack>
                         <Stack sx={{opacity:product.isDeleted?.7:1}}>
-                            <ProductCard key={product._id} id={product.slug} title={product.title} thumbnail={product.thumbnail} brand={product.brand.name} price={product.price} isAdminCard={true}/>
+                            <ProductCard key={product._id} id={product.slug} title={product.title} thumbnail={product.thumbnail} brand={product.brand.name} price={product.price} discountPrice={product.discountPrice} isAdminCard={true}/>
                         </Stack>
                         <Stack paddingLeft={2} paddingRight={2} flexDirection={'row'} justifySelf={'flex-end'} alignSelf={'flex-end'} columnGap={is488?1:2}>
                             <Button component={Link} to={`/admin/product-update/${product.slug}`} variant='contained'>Update</Button>
