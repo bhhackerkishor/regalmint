@@ -65,9 +65,9 @@ exports.login=async(req,res)=>{
             // sending jwt token in the response cookies
             res.cookie('token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Secure only in production
-    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-    maxAge: parseInt(process.env.COOKIE_EXPIRATION_DAYS) * 24 * 60 * 60 * 1000, // Convert days to milliseconds
+    secure: true, // Must be true on HTTPS (Vercel forces HTTPS)
+    sameSite: 'None',  // Must be a string
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 });
 
             return res.status(200).json(sanitizeUser(existingUser))
