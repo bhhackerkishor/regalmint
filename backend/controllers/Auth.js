@@ -32,11 +32,11 @@ exports.signup=async(req,res)=>{
         const token=generateToken(secureInfo)
 
         // sending jwt token in the response cookies
-        res.cookie("token", token, {
-            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-            maxAge: parseInt(process.env.COOKIE_EXPIRATION_DAYS) * 24 * 60 * 60 * 1000, // Convert days to milliseconds
-            httpOnly: true,
-            secure: true,
+        res.cookie('token',token,{
+                sameSite:"None",
+                maxAge:new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRATION_DAYS * 24 * 60 * 60 * 1000))),
+                httpOnly:true,
+                secure:"true"
           });
           
 
@@ -64,10 +64,10 @@ exports.login=async(req,res)=>{
 
             // sending jwt token in the response cookies
             res.cookie('token',token,{
-                sameSite:process.env.PRODUCTION==='true'?"None":'Lax',
+                sameSite:"None",
                 maxAge:new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRATION_DAYS * 24 * 60 * 60 * 1000))),
                 httpOnly:true,
-                secure:process.env.PRODUCTION==='true'?true:false
+                secure:"true"
             })
             return res.status(200).json(sanitizeUser(existingUser))
         }
